@@ -66,6 +66,7 @@ public class TaskUI {
                     case "1":
                     // ログインユーザーを渡してタスクの一覧を表示させる
                         taskLogic.showAll(loginUser);
+                        // ステータス更新機能のサブメニューを追加
                         selectSubMenu();
                         break;
                     case "2":

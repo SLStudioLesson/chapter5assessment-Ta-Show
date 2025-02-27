@@ -126,10 +126,6 @@ public class TaskLogic {
         logDataAccess.save(log);
     }
 
-    public Task findByCode(int code) {
-        return taskDataAccess.findByCode(code);
-    }
-
     /**
      * タスクを削除します。
      *
