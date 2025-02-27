@@ -42,6 +42,7 @@ public class TaskLogic {
      * @param loginUser ログインユーザー
      */
     public void showAll(User loginUser) {
+
         List<Task> tasks = taskDataAccess.findAll();
 
         tasks.stream()
@@ -125,7 +126,7 @@ public class TaskLogic {
         Log log = new Log(code, loginUser.getCode(), task.getStatus(), LocalDate.now());
         logDataAccess.save(log);
     }
-
+    
     /**
      * タスクを削除します。
      *

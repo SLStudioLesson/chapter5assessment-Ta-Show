@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import com.taskapp.exception.AppException;
 import com.taskapp.logic.TaskLogic;
 import com.taskapp.logic.UserLogic;
-import com.taskapp.model.Task;
 import com.taskapp.model.User;
 
 public class TaskUI {
@@ -217,13 +216,6 @@ public class TaskUI {
                     System.out.println("コードは半角の数字で入力してください");
                 }
 
-                int taskCode = Integer.parseInt(code);
-                Task task = taskLogic.findByCode(taskCode);
-                if (task == null) {
-                    System.out.println("存在するタスクコードを入力してください");
-                    continue;
-                }
-
                 System.out.println("どのステータスに変更するか選択してください。");
                 System.out.println("1. 着手中, 2. 完了");
                 System.out.print("選択肢：");
@@ -240,13 +232,13 @@ public class TaskUI {
                     continue;
                 }
 
-                taskLogic.changeStatus(taskCode, newStatus, loginUser);
+                taskLogic.changeStatus(Integer.parseInt(code), newStatus, loginUser);
                 System.out.println("タスクのステータスが変更されました");
                 flg = false;
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (AppException e) {
-                System.out.println("存在するタスクコードを入力してください");
+                System.out.println(e.getMessage());
             }
         }
     }

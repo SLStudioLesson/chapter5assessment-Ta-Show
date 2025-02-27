@@ -157,6 +157,6 @@ public class TaskDataAccess {
      * @return CSVに書き込むためのフォーマット文字列
      */
     private String createLine(Task task) {
-        return task.getCode() + "," + task.getName() + "," + task.getStatus() + "," + task.getRepUser();
+        return task.getCode() + "," + task.getName() + "," + task.getStatus() + "," + task.getRepUser().getCode();
     }
 }
