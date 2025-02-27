@@ -81,6 +81,7 @@ public class TaskLogic {
      */
     public void save(int code, String name, int repUserCode,User loginUser) throws AppException {
         User user = userDataAccess.findByCode(repUserCode);
+
         if (user == null) {
             throw new AppException("存在するユーザーコードを入力してください");
         }
@@ -94,7 +95,7 @@ public class TaskLogic {
         Log log = new Log(code, loginUser.getCode(), 0, LocalDate.now());
         // log.csvにデータを1件新規登録
         logDataAccess.save(log);
-        System.out.println(user.getName() + "の登録が完了しました。");
+        System.out.println(task.getName() + "の登録が完了しました。");
             
     }
 
@@ -109,9 +110,25 @@ public class TaskLogic {
      * @param loginUser ログインユーザー
      * @throws AppException タスクコードが存在しない、またはステータスが前のステータスより1つ先でない場合にスローされます
      */
-    // public void changeStatus(int code, int status,
-    //                         User loginUser) throws AppException {
-    // }
+    public void changeStatus(int code, int status, User loginUser) throws AppException {
+        Task task = taskDataAccess.findByCode(code);
+        if (task == null ) {
+            throw new AppException("存在するタスクコードを入力してください");
+        }
+
+        if (status - task.getStatus() != 1) {
+            throw new AppException("ステータスは、前のステータスより1つ先のもののみを選択してください");
+        }
+
+        task.setStatus(status);
+        taskDataAccess.update(task);
+        Log log = new Log(code, loginUser.getCode(), task.getStatus(), LocalDate.now());
+        logDataAccess.save(log);
+    }
+
+    public Task findByCode(int code) {
+        return taskDataAccess.findByCode(code);
+    }
 
     /**
      * タスクを削除します。

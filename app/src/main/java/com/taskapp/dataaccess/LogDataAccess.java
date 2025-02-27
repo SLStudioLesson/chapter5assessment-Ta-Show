@@ -100,7 +100,8 @@ public class LogDataAccess {
      * @param log フォーマットを作成するログ
      * @return CSVファイルに書き込むためのフォーマット
      */
-    // private String createLine(Log log) {
-    // }
+    private String createLine(Log log) {
+        return log.getTaskCode() + "," + log.getChangeUserCode() + "," + log.getStatus() + "," + log.getChangeDate();
+    }
 
 }
