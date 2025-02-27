@@ -1,5 +1,16 @@
 package com.taskapp.dataaccess;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.taskapp.model.Log;
+
 public class LogDataAccess {
     private final String filePath;
 
@@ -21,27 +32,53 @@ public class LogDataAccess {
      *
      * @param log 保存するログ
      */
-    // public void save(Log log) {
-    //     try () {
-
-    //     } catch (IOException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
+    
+    public void save(Log log) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            String line = createLine(log);
+            // 改行を追加する
+            writer.newLine();
+            // データを1行分追加する
+            writer.write(line);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * すべてのログを取得します。
      *
      * @return すべてのログのリスト
      */
-    // public List<Log> findAll() {
-    //     try () {
+    public List<Log> findAll() {
+        List<Log> logs = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            // タイトル行を読み飛ばす
+            reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(",");
 
-    //     } catch (IOException e) {
-    //         e.printStackTrace();
-    //     }
-    //     return null;
-    // }
+                // CSVに間違いがあったらスキップする
+                if (values.length != 4) {
+                    continue;
+                }
+
+                int taskCode = Integer.parseInt(values[0]);
+                int changeUserCode = Integer.parseInt(values[1]);
+                int status = Integer.parseInt(values[2]);
+                LocalDate changeDate = LocalDate.parse(values[3]);
+
+                // Logオブジェクトのマッピングしていく
+                Log log = new Log(taskCode, changeUserCode, status, changeDate);
+                // logsに追加
+                logs.add(log);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return logs;
+    }
 
     /**
      * 指定したタスクコードに該当するログを削除します。
